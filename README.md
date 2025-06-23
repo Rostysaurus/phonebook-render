@@ -1,3 +1,3 @@
 # phonebook-render-backend
 
-https://phonebook-render-backend.onrender.com/info
+https://phonebook-render-backend.onrender.com
