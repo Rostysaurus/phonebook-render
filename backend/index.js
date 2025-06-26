@@ -8,15 +8,15 @@ const app = express()
 morgan.token('body', (req) => req.method === 'POST' ? JSON.stringify(req.body.content) : '')
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({error: 'unknown endpoint'})
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
-    return response.status(400).send({error: 'malformatted id'})
+    return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({error: error.message})
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
@@ -31,7 +31,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 app.get('/info', (request, response) => {
   Person.find({})
     .then(people => {
-      const now = new Date();
+      const now = new Date()
       return response.send(`<h3>Phonebook has info for ${getPersonsCount(people)}</h3><h3>${now}</h3>`)
     })
 })
@@ -57,7 +57,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -65,10 +65,10 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.post('/api/persons', (request, response, next) => {
   if (!request.body) {
-    return response.status(400).json({error: 'name or number missing'})
+    return response.status(400).json({ error: 'name or number missing' })
   }
 
-  const {name, number} = request.body
+  const { name, number } = request.body
 
   const person = new Person({
     name,
@@ -84,9 +84,9 @@ app.post('/api/persons', (request, response, next) => {
 
 app.put('/api/persons/:id', (request, response, next) => {
   if (!request.body) {
-    return response.status(400).json({error: 'name or number missing'})
+    return response.status(400).json({ error: 'name or number missing' })
   }
-  const {name, number} = request.body
+  const { name, number } = request.body
   Person.findById(request.params.id)
     .then(person => {
       if (!person) {
