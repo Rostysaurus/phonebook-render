@@ -55,7 +55,7 @@ const App = () => {
                         setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.log('error', err.response.data.error)
                         triggerMessage({
                             text: `the person ${existingPerson.name} was already deleted from server`,
                             type: 'error',
@@ -65,6 +65,7 @@ const App = () => {
 
             return
         }
+        console.log('adding new person...', newPerson)
         personsService.create(newPerson)
             .then(addedPerson => {
                 triggerMessage({
@@ -77,7 +78,13 @@ const App = () => {
                 ])
                 setNewPerson(newPersonInitState)
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log('error:', err.response.data.error)
+                triggerMessage({
+                    text: err.response.data.error,
+                    type: 'error',
+                })
+            });
     }
 
     const handleFilterChange = (e) => {
